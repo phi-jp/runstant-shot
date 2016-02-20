@@ -43,6 +43,8 @@ app.get('/shot', function (req, res) {
     // とりあえずダミーを投げる
     res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
 
+    console.log('create');
+
     // なければ作る
     nightmare = Nightmare({show: false});
     var dummy = nightmare
@@ -62,6 +64,8 @@ app.get('/shot', function (req, res) {
       .then(function(result) {
         console.log(result);
         nightmare = null;
+      }, function(error) {
+        console.log(error);
       })
       ;
   }
