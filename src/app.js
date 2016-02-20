@@ -8,6 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var crc = require('crc');
 var Nightmare = require('nightmare');
+var nightmare = null;
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -34,12 +35,15 @@ app.get('/shot', function (req, res) {
   if (fs.existsSync(output)) {
     res.sendFile(path.join(__dirname, '../', output));
   }
+  else if (nightmare) {
+    res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
+  }
   else {
     // とりあえずダミーを投げる
     res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
 
     // なければ作る
-    var nightmare = Nightmare({show: false});
+    nightmare = Nightmare({show: false});
     var dummy = nightmare
       .goto(url)
       .wait(2500)
@@ -56,6 +60,7 @@ app.get('/shot', function (req, res) {
       .end()
       .then(function(result) {
         console.log(result);
+        nightmare = null;
       })
       ;
   }
