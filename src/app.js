@@ -7,6 +7,7 @@ var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
 var crc = require('crc');
+var webshot = require('webshot');
 var Nightmare = require('nightmare');
 var nightmare = null;
 var app = express();
@@ -65,6 +66,19 @@ app.get('/shot', function (req, res) {
       ;
   }
 
+});
+
+app.get('/shot2', function (req, res) {
+  var url = req.query.url;
+  var name = crc.crc32(url).toString(16);
+  var output = 'static/images/' + name + '.png';
+  console.log(output);
+
+  webshot(url, output, function(err) {
+    // screenshot now saved to google.png
+    console.log(err);
+    res.sendFile(path.join(__dirname, '../', output));
+  });
 });
 
 // launch server
