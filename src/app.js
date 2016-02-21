@@ -70,6 +70,21 @@ app.get('/shot', function (req, res) {
 
 });
 
+app.get('/webshot', function (req, res) {
+  var url = req.query.url;
+  var name = crc.crc32(url).toString(16);
+  var output = 'static/images/' + name + '.png';
+  var options = {
+    errorIfJSException: true,
+    renderDelay: 4,
+  };
+
+  webshot(url, output, options, function(err) {
+    console.log(err);
+    res.sendFile(path.join(__dirname, '../', output));
+  });
+});
+
 app.get('/shot2', function (req, res) {
   var url = req.query.url;
   var name = crc.crc32(url).toString(16);
