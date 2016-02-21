@@ -1,1 +1,2 @@
 http://orm-buildpack.s3.amazonaws.com/Xvfb.tar.gz
+https://s3.amazonaws.com/heroku.buildpacks/xvfb.tar.bz2
