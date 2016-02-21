@@ -75,7 +75,8 @@ app.get('/shot2', function (req, res) {
   var name = crc.crc32(url).toString(16);
   var output = 'static/images/' + name + '.png';
   var options = {
-    phantomPath: './node_modules/slimerjs/bin/slimerjs',
+    // phantomPath: './node_modules/slimerjs/bin/slimerjs',
+    phantomPath: './node_modules/slimerjs/lib/slimer/slimerjs',
     // phantomPath: 'slimerjs',
     // phantomPath: './node_modules/phantomjs2/bin/phantomjs',
     // phantomPath: require('phantomjs2').path,
