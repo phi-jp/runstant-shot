@@ -1,3 +1,4 @@
 https://github.com/heroku/heroku-buildpack-nodejs.git
+http://github.com/douglasjsellers/heroku-xvfb-buildpack
 https://github.com/stomita/heroku-buildpack-phantomjs.git
 https://github.com/methyl/heroku-buildpack-slimerjs.git
