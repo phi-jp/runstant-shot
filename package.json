@@ -24,6 +24,8 @@
     "js-yaml": "^3.5.2",
     "less-middleware": "^2.0.1",
     "morgan": "^1.7.0",
-    "nightmare": "^2.2.0"
+    "nightmare": "^2.2.0",
+    "slimerjs": "^0.9.6",
+    "webshot": "^0.18.0"
   }
 }
