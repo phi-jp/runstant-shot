@@ -81,12 +81,21 @@ app.get('/shot2', function (req, res) {
     // phantomPath: './node_modules/phantomjs2/bin/phantomjs',
     // phantomPath: require('phantomjs2').path,
     // phantomPath: require('phantomjs-prebuilt').path,
-    screenSize: {
-      width: 320,
-      height: 240,
-    },
+
+    // screenSize: {
+    //   width: 320,
+    //   height: 480,
+    // },
+
+    // shotSize: {
+    //   width: 320,
+    //   height: 240,
+    // },
+    errorIfJSException: true,
     renderDelay: 4,
   };
+
+  console.log(require('slimerjs').path);
 
   webshot(url, output, options, function(err) {
     console.log('finish!');
