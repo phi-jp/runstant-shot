@@ -76,7 +76,10 @@ app.get('/shot2', function (req, res) {
   var output = 'static/images/' + name + '.png';
   var options = {
     phantomPath: './node_modules/slimerjs/bin/slimerjs',
-    phantomPath: 'slimerjs',
+    // phantomPath: 'slimerjs',
+    // phantomPath: './node_modules/phantomjs2/bin/phantomjs',
+    // phantomPath: require('phantomjs2').path,
+    // phantomPath: require('phantomjs-prebuilt').path,
     screenSize: {
       width: 320,
       height: 240,
@@ -85,6 +88,7 @@ app.get('/shot2', function (req, res) {
   };
 
   webshot(url, output, options, function(err) {
+    console.log('finish!');
     console.log(err);
     // screenshot now saved to google.png
     res.sendFile(path.join(__dirname, '../', output));
