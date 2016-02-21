@@ -84,6 +84,7 @@ app.get('/shot2', function (req, res) {
   };
 
   webshot(url, output, options, function(err) {
+    console.log(err);
     // screenshot now saved to google.png
     res.sendFile(path.join(__dirname, '../', output));
   });
