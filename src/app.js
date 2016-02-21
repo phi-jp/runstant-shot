@@ -76,6 +76,7 @@ app.get('/shot2', function (req, res) {
   var output = 'static/images/' + name + '.png';
   var options = {
     phantomPath: './node_modules/slimerjs/bin/slimerjs',
+    phantomPath: 'slimerjs',
     screenSize: {
       width: 320,
       height: 240,
