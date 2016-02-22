@@ -20,8 +20,8 @@ app.set('view engine', 'jade');
 // ログ出力
 app.use(morgan('dev', {}));
 // app.use(express.compress());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(require('less-middleware')(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, '../static')));
 
 app.get('/', function (req, res) {
   res.send('index');

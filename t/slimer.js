@@ -1,7 +1,11 @@
 var page = require('webpage').create();
+var system = require('system');
+var args = system.args;
 
-page.open("http://phiary.me", function (status) {
+var url = args[1] || 'http://phiary.me';
+
+page.open(url, function (status) {
   page.viewportSize = { width:1024, height:768 };
-  page.render('screenshot.png');
+  page.render('static/screenshot.png');
   slimer.exit();
 });
