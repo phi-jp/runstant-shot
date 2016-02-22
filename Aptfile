@@ -5,3 +5,6 @@ xfonts-75dpi
 xfonts-scalable
 xfonts-cyrillic
 x11-apps
+build-essential
+libxi-dev
+libglu1-mesa-dev
