@@ -85,7 +85,7 @@ app.get('/webshot', function (req, res) {
   });
 });
 
-app.get('/shot2', function (req, res) {
+app.get('/slimer', function (req, res) {
   var url = req.query.url;
   var name = crc.crc32(url).toString(16);
   var output = 'static/images/' + name + '.png';
