@@ -76,8 +76,9 @@ app.get('/origin', function(req, res) {
   var name = crc.crc32(url).toString(16);
   var output = 'static/images/' + name + '.png';
   var options = {
-    phantomPath: require('slimerjs').path,
+    // phantomPath: require('slimerjs').path,
     // phantomPath: 'xvfb-run slimerjs',
+    phantomPath: 'xvfb-run ' + require('slimerjs').path,
     renderDelay: 4,
   };
 
