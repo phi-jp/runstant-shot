@@ -75,6 +75,8 @@ app.get('/webshot', function (req, res) {
   var name = crc.crc32(url).toString(16);
   var output = 'static/images/' + name + '.png';
   var options = {
+    phantomPath: 'xvfb-run '+ require('slimerjs').path,
+    // phantomPath: './node_modules/slimerjs/lib/slimer/slimerjs',
     errorIfJSException: true,
     renderDelay: 4,
   };
