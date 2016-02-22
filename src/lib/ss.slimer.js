@@ -14,6 +14,7 @@ for (var i=0; i<args.length; ++i) {
 };
 
 page.open(argv.url, function (status) {
+  slimer.wait(4000)
   page.viewportSize = { width:1024, height:768 };
   page.render(argv.output);
   slimer.exit();
