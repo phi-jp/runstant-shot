@@ -10,6 +10,7 @@ var crc = require('crc');
 var webshot = require('webshot');
 var Nightmare = require('nightmare');
 var nightmare = null;
+var shot = require('./lib/shot.js');
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -68,6 +69,22 @@ app.get('/shot', function (req, res) {
       ;
   }
 
+});
+
+app.get('/origin', function(req, res) {
+  var url = req.query.url;
+  var name = crc.crc32(url).toString(16);
+  var output = 'static/images/' + name + '.png';
+  var options = {
+    phantomPath: require('slimerjs').path,
+    // phantomPath: 'xvfb-run slimerjs',
+    renderDelay: 4,
+  };
+
+  shot.shot(url, output, options, function(err) {
+    console.log(err);
+    res.sendFile(path.join(__dirname, '../', output));
+  });
 });
 
 app.get('/webshot', function (req, res) {
