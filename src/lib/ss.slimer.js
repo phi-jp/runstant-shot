@@ -15,7 +15,13 @@ for (var i=0; i<args.length; ++i) {
 
 page.open(argv.url, function (status) {
   slimer.wait(4000);
-  page.viewportSize = { width:1024, height:768 };
+  page.viewportSize = { width:640, height:480 };
+  page.clipRect = {
+    top: 0,
+    left: 0,
+    width: 640,
+    height: 480,
+  };
   page.render(argv.output);
   slimer.exit();
 });
