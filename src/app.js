@@ -13,7 +13,19 @@ var nightmare = null;
 var shot = require('./lib/shot.js');
 var app = express();
 
-app.set('port', process.env.PORT || 3000);
+var phantomPath = (function() {
+  var p = require('slimerjs').path;
+  if (process.env.PORT) {
+    return 'xvfb-run --server-args="-screen 0 1024x768x24" ' + p;
+  }
+  else {
+    return p;
+  }
+})();
+
+console.log(phantomPath)
+
+app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -27,120 +39,34 @@ app.get('/', function (req, res) {
   res.send('index');
   // res.render('index');
 });
-app.get('/shot', function (req, res) {
+
+var lock = false;
+app.get('/shot', function(req, res) {
   var url = req.query.url;
   var name = crc.crc32(url).toString(16);
   var output = 'static/images/' + name + '.png';
-  console.log('shot: ' + output);
+  var options = {
+    phantomPath: phantomPath,
+    renderDelay: 4,
+  };
 
   // あればそれを返す
   if (fs.existsSync(output)) {
     res.sendFile(path.join(__dirname, '../', output));
   }
-  else if (nightmare) {
+  else if (lock) {
     res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
   }
   else {
-    // とりあえずダミーを投げる
     res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
-
-    // なければ作る
-    nightmare = Nightmare({show: false});
-    var dummy = nightmare
-      .goto(url)
-      .wait(2500)
-      .viewport(320, 240)
-      .screenshot(output, {
-        x: 0,
-        y: 0,
-        width: 320,
-        height: 240,
-      })
-      .evaluate(function() {
-        return location.origin + location.pathname;
-      })
-      .end()
-      .then(function(result) {
-        console.log(result);
-        nightmare = null;
-      }, function(error) {
-        console.log(error);
-      })
-      ;
+    lock = true;
+    console.log('shot');
+    shot.shot(url, output, options, function(err) {
+      console.log(err);
+      lock = false;
+      // res.sendFile(path.join(__dirname, '../', output));
+    });
   }
-
-});
-
-app.get('/origin', function(req, res) {
-  var url = req.query.url;
-  var name = crc.crc32(url).toString(16);
-  var output = 'static/images/' + name + '.png';
-  var options = {
-    // phantomPath: 'xvfb-run slimerjs',
-    // phantomPath: 'xvfb-run --server-args="-screen 0 1024x768x24" slimerjs',
-    // phantomPath: require('slimerjs').path,
-    phantomPath: 'xvfb-run --server-args="-screen 0 1024x768x24" ' + require('slimerjs').path,
-    renderDelay: 4,
-  };
-
-  shot.shot(url, output, options, function(err) {
-    console.log(err);
-    res.sendFile(path.join(__dirname, '../', output));
-  });
-});
-
-app.get('/webshot', function (req, res) {
-  var url = req.query.url;
-  var name = crc.crc32(url).toString(16);
-  var output = 'static/images/' + name + '.png';
-  var options = {
-    phantomPath: 'xvfb-run '+ require('slimerjs').path,
-    phantomPath: 'xvfb-run slimerjs',
-    // phantomPath: './node_modules/slimerjs/lib/slimer/slimerjs',
-    errorIfJSException: true,
-    renderDelay: 4,
-  };
-
-  webshot(url, output, options, function(err) {
-    console.log(err);
-    res.sendFile(path.join(__dirname, '../', output));
-  });
-});
-
-app.get('/slimer', function (req, res) {
-  var url = req.query.url;
-  var name = crc.crc32(url).toString(16);
-  var output = 'static/images/' + name + '.png';
-  var options = {
-    // phantomPath: './node_modules/slimerjs/bin/slimerjs',
-    phantomPath: './node_modules/slimerjs/lib/slimer/slimerjs',
-    // phantomPath: 'slimerjs',
-    // phantomPath: './node_modules/phantomjs2/bin/phantomjs',
-    // phantomPath: require('phantomjs2').path,
-    // phantomPath: require('phantomjs-prebuilt').path,
-
-    // screenSize: {
-    //   width: 320,
-    //   height: 480,
-    // },
-
-    // shotSize: {
-    //   width: 320,
-    //   height: 240,
-    // },
-    errorIfJSException: true,
-    renderDelay: 4,
-  };
-
-  console.log(require('slimerjs').path);
-
-  webshot(url, output, options, function(err) {
-    console.log('finish!');
-    console.log(err);
-    // screenshot now saved to google.png
-    res.writeHead(200, {'Content-Type': 'image/png' });
-    res.sendFile(path.join(__dirname, '../', output));
-  });
 });
 
 // launch server

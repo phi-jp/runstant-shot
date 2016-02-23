@@ -16,12 +16,12 @@ for (var i=0; i<args.length; ++i) {
 page.open(argv.url, function (status) {
   page.viewportSize = { width:640, height:480 };
   // page.viewportSize = { width:640, height:480 };
-  // page.clipRect = {
-  //   top: 0,
-  //   left: 0,
-  //   width: 640,
-  //   height: 480,
-  // };
+  page.clipRect = {
+    top: 0,
+    left: 0,
+    width: 640,
+    height: 480,
+  };
   slimer.wait(4000);
   page.render(argv.output);
   slimer.exit();
