@@ -139,6 +139,7 @@ app.get('/slimer', function (req, res) {
     console.log('finish!');
     console.log(err);
     // screenshot now saved to google.png
+    res.writeHead(200, {'Content-Type': 'image/png' });
     res.sendFile(path.join(__dirname, '../', output));
   });
 });
