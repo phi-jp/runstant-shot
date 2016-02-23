@@ -23,8 +23,6 @@ var phantomPath = (function() {
   }
 })();
 
-console.log(phantomPath)
-
 app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -40,7 +38,6 @@ app.get('/', function (req, res) {
   // res.render('index');
 });
 
-var lock = false;
 app.get('/shot', function(req, res) {
   var url = req.query.url;
   var name = crc.crc32(url).toString(16);
@@ -54,16 +51,11 @@ app.get('/shot', function(req, res) {
   if (fs.existsSync(output)) {
     res.sendFile(path.join(__dirname, '../', output));
   }
-  else if (lock) {
-    res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
-  }
+  // キュー待ちも除外
   else {
     res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
-    lock = true;
-    console.log('shot');
     shot.shot(url, output, options, function(err) {
       console.log(err);
-      lock = false;
       // res.sendFile(path.join(__dirname, '../', output));
     });
   }
