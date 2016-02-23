@@ -14,7 +14,7 @@ for (var i=0; i<args.length; ++i) {
 };
 
 page.open(argv.url, function (status) {
-  page.viewportSize = { width:1024, height:768 };
+  page.viewportSize = { width:640, height:480 };
   // page.viewportSize = { width:640, height:480 };
   // page.clipRect = {
   //   top: 0,
