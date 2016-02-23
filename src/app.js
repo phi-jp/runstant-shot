@@ -79,8 +79,7 @@ app.get('/origin', function(req, res) {
     phantomPath: require('slimerjs').path,
     // phantomPath: 'xvfb-run slimerjs',
     // phantomPath: 'xvfb-run --server-args="-screen 0 1024x768x24" slimerjs',
-    // phantomPath: 'xvfb-run --server-args="-screen 0 1024x768x24" ' + require('slimerjs').path,
-    phantomPath: 'xvfb-run ' + require('slimerjs').path,
+    phantomPath: 'xvfb-run --server-args="-screen 0 1024x768x24" ' + require('slimerjs').path,
     renderDelay: 4,
   };
 
