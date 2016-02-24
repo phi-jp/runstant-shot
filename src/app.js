@@ -23,6 +23,34 @@ var phantomPath = (function() {
   }
 })();
 
+// aws
+var AWS = require('aws-sdk');
+AWS.config.update({
+  // region: 'Tokyo',
+  accessKeyId: 'aaa',
+  secretAccessKey: 'bbb',
+});
+// var s3 = new AWS.S3();
+
+// s3.putObject({
+//   Bucket: 'runstant-shot',
+//   Key: 'foo.txt',
+//   Body: 'Hello, world!',
+// }, function(err, url) {
+//   console.log(err);
+//   console.log(url);
+//   console.log('Successfully uploaded package.');
+// });
+
+// s3.getObject({
+//   Bucket: 'runstant-shot',
+//   Key: 'dummy.png',
+// }, function(err, url) {
+//   console.log(err);
+//   console.log(url);
+// });
+
+
 app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -59,6 +87,18 @@ app.get('/shot', function(req, res) {
       // res.sendFile(path.join(__dirname, '../', output));
     });
   }
+});
+
+app.get('/hoge', function(req, res) {
+
+  s3.getObject({
+    Bucket: 'runstant-shot',
+    Key: 'dummy.png',
+  }, function(err, url) {
+    console.log('***************');
+    console.log(url);
+  });
+
 });
 
 // launch server
