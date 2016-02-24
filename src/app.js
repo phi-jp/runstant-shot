@@ -69,7 +69,6 @@ app.get('/shot', function(req, res) {
   }, function(err, data) {
     // データがあればそれを返す
     if (data) {
-      console.log('hoge');
       res.writeHead(200, {'Content-Type': data.ContentType });
       res.end(data.Body);
     }
