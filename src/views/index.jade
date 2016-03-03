@@ -1,0 +1,22 @@
+
+html
+  head
+  body
+    h1 runstant-shot
+    form(onsubmit='return shot();')
+      input#url(value='http://phiary.me')
+      br
+      input#width(type='number' value=320)
+      br
+      input#height(type='number' value=240)
+      br
+      button submit
+      br
+    img#img(src='#')
+  script.
+    var shot = function() {
+      console.log(url.value);
+      var size = width.value + 'x' + height.value;
+      img.src = '/shot/' + size + '?url=' + url.value;
+      return false;
+    }

@@ -7,10 +7,6 @@ var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
 var crc = require('crc');
-var webshot = require('webshot');
-var Nightmare = require('nightmare');
-var nightmare = null;
-var shot = require('./lib/shot.js');
 var capstant = require('capstant');
 var app = express();
 
@@ -117,88 +113,11 @@ app.get('/shot/:size', function(req, res) {
   });
 });
 
-app.get('/shot', function(req, res) {
-  var url = req.query.url;
-  var name = crc.crc32(url).toString(16);
-  var output = 'static/images/' + name + '.png';
-  var options = {
-    phantomPath: phantomPath,
-    renderDelay: 4,
-  };
-
-  s3.getObject({
-    Bucket: 'runstant-shot',
-    Key: name,
-  }, function(err, data) {
-    // データがあればそれを返す
-    if (data) {
-      res.writeHead(200, {'Content-Type': data.ContentType });
-      res.end(data.Body);
-    }
-    // なければダミーを返してショットキューに入れる
-    else {
-      res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
-      shot.shot(url, output, options, function(err) {
-        // console.log(err);
-
-        var img = fs.readFileSync(path.join(__dirname, '../', output));
-        s3.putObject({
-          Bucket: 'runstant-shot',
-          Key: name,
-          ContentType: 'image/png',
-          ACL: 'public-read',
-          Body: img,
-        }, function(err, data) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            console.log('success upload ' + name + ' to s3.');
-          }
-        });
-      });
-    }
-  });
-});
-
 // queue の状態を見れるようにする
 app.get('/queue', function(req, res) {
 
 });
 
-
-app.get('/hoge', function(req, res) {
-
-  // var img = fs.readFileSync('static/images/13ab8409.png');
-  // res.writeHead(200, {'Content-Type': 'image/png' });
-  // res.end(img);
-
-  // return ;
-
-
-  s3.getObject({
-    Bucket: 'runstant-shot',
-    Key: 'dummy.png',
-  }, function(err, data) {
-    console.log(data);
-    res.writeHead(200, {'Content-Type': data.ContentType });
-    res.end(data.Body);
-  });
-
-
-  // var img = fs.readFileSync('static/images/13ab8409.png');
-  // s3.putObject({
-  //   Bucket: 'runstant-shot',
-  //   Key: 'aaaaa.txt',
-  //   Body: 'Hello, BBBB!',
-  //   // Key: 'hoge.png',
-  //   // Body: img,
-  // }, function(err, data) {
-  //   console.log(data);
-  //   res.send('success update!');
-  // });
-
-});
 
 // launch server
 var server = app.listen(app.get('port'), function() {
