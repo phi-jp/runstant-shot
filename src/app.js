@@ -115,7 +115,7 @@ app.get('/shot/:size', function(req, res) {
 
 // queue の状態を見れるようにする
 app.get('/queue', function(req, res) {
-
+  res.send('<pre>' + JSON.stringify(queue, null, '  ') + '</pre>');
 });
 
 
