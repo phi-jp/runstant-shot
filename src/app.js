@@ -66,7 +66,7 @@ app.get('/shot/:size', function(req, res) {
     output: output,
     width: width,
     height: height,
-    delay: delay,
+    delay: +delay,
   };
 
   s3.getObject({
