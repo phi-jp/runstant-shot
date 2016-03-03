@@ -71,7 +71,7 @@ app.get('/shot/:size', function(req, res) {
 
   s3.getObject({
     Bucket: 'runstant-shot',
-    Key: key,
+    Key: 'shot/' + key,
   }, function(err, data) {
     if (data) {
       res.writeHead(200, {'Content-Type': data.ContentType });
@@ -93,7 +93,7 @@ app.get('/shot/:size', function(req, res) {
         var img = fs.readFileSync(path.join(__dirname, '../', output));
         s3.putObject({
           Bucket: 'runstant-shot',
-          Key: key,
+          Key: 'shot/' + key,
           ContentType: 'image/png',
           ACL: 'public-read',
           Body: img,
