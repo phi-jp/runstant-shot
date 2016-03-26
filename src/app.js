@@ -61,7 +61,8 @@ app.get('/shot/:size', function(req, res) {
   var key = crc.crc32(req.originalUrl).toString(16);
   var url = req.query.url;
   var output = 'static/images/' + key + '.png';
-  var delay = req.query.delay || 0;
+  var delay = +req.query.delay || 0;
+  var zoom = +req.query.zoom || 1;
   var sizes = req.params.size.split('x');
   var width = +sizes[0];
   var height = +sizes[1];
@@ -71,7 +72,8 @@ app.get('/shot/:size', function(req, res) {
     output: output,
     width: width,
     height: height,
-    delay: +delay,
+    delay: delay,
+    zoom: zoom,
   };
 
   s3.getObject({
