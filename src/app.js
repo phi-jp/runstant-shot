@@ -10,15 +10,20 @@ var crc = require('crc');
 var capstant = require('capstant');
 var app = express();
 
-var phantomPath = (function() {
+var phantomPath = function(width, height) {
   var p = require('slimerjs').path;
   if (process.env.PORT) {
-    return 'xvfb-run --server-args="-screen 0 1024x768x24" ' + p;
+    var xvfbPath = 'xvfb-run --server-args="-screen 0 {width}x{height}x24" ';
+    xvfbPath = xvfbPath
+      .replace('{width}', width || 1024)
+      .replace('{height}', height || 768)
+      ;
+    return xvfbPath + p;
   }
   else {
     return p;
   }
-})();
+};
 
 // aws
 var AWS = require('aws-sdk');
@@ -61,7 +66,7 @@ app.get('/shot/:size', function(req, res) {
   var width = +sizes[0];
   var height = +sizes[1];
   var options = {
-    phantomPath: phantomPath,
+    phantomPath: phantomPath(width, height),
     url: url,
     output: output,
     width: width,
