@@ -75,6 +75,7 @@ app.get('/shot/:size', function(req, res) {
     delay: delay,
     zoom: zoom,
   };
+  var queueKey = key+':'+url;
 
   s3.getObject({
     Bucket: 'runstant-shot',
@@ -87,13 +88,13 @@ app.get('/shot/:size', function(req, res) {
     else {
       res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
 
-      if (queue.indexOf(key) !== -1) {
+      if (queue.indexOf(queueKey) !== -1) {
         console.log('キューにあるので無視');
         return ;
       }
       
       // キューに追加
-      queue.push(key);
+      queue.push(queueKey);
 
       // スクショ
       capstant.shot(url, output, options).then(function() {
@@ -106,12 +107,14 @@ app.get('/shot/:size', function(req, res) {
           Body: img,
         }, function(err, data) {
           if (err) {
+            // キューから削除
+            queue.splice(queue.indexOf(queueKey), 1);
             console.log(err);
           }
           else {
             console.log('success upload ' + key + ' to s3.');
             // キューから削除
-            queue.splice(queue.indexOf(key), 1);
+            queue.splice(queue.indexOf(queueKey), 1);
           }
         });
 
