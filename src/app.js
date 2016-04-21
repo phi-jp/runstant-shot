@@ -8,6 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var crc = require('crc');
 var capstant = require('capstant');
+var compression = require('compression');
 var app = express();
 
 var phantomPath = function(width, height) {
@@ -44,6 +45,8 @@ var s3 = new AWS.S3();
 app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use(compression());
 
 // ログ出力
 app.use(morgan('dev', {}));
