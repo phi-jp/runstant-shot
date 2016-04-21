@@ -80,13 +80,17 @@ app.get('/shot/:size', function(req, res) {
   };
   var queueKey = key+':'+url;
 
-  s3.getObject({
+  // s3.getObject({
+  s3.headObject({
     Bucket: 'runstant-shot',
     Key: 'shot/' + key,
   }, function(err, data) {
     if (data) {
-      res.writeHead(200, {'Content-Type': data.ContentType });
-      res.end(data.Body);
+      // res.writeHead(200, {'Content-Type': data.ContentType });
+      // res.end(data.Body);
+
+      var s3URL = 'https://s3-ap-northeast-1.amazonaws.com/runstant-shot/shot/' + key;
+      res.redirect(s3URL);
     }
     else {
       res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
