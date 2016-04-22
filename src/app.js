@@ -62,8 +62,17 @@ app.get('/', function (req, res) {
 
 
 var queue = [];
+var cache = {};
 app.get('/shot/:size', function(req, res) {
   var key = crc.crc32(req.originalUrl).toString(16);
+
+  if (cache[key]) {
+    console.log('use cache');
+    var imageURL = S3_URL + '/' + key;
+    res.redirect(imageURL);
+    return ;
+  }
+
   var url = req.query.url;
   var output = 'static/images/' + key + '.png';
   var delay = +req.query.delay || 0;
@@ -90,6 +99,9 @@ app.get('/shot/:size', function(req, res) {
     if (data) {
       // res.writeHead(200, {'Content-Type': data.ContentType });
       // res.end(data.Body);
+
+      // cache
+      cache[key] = true;
 
       var imageURL = S3_URL + '/' + key;
       res.redirect(imageURL);
