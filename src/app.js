@@ -11,6 +11,8 @@ var capstant = require('capstant');
 var compression = require('compression');
 var app = express();
 
+var S3_URL = 'https://s3-ap-northeast-1.amazonaws.com/runstant-shot/shot';
+
 var phantomPath = function(width, height) {
   var p = require('slimerjs').path;
   if (process.env.PORT) {
@@ -89,8 +91,8 @@ app.get('/shot/:size', function(req, res) {
       // res.writeHead(200, {'Content-Type': data.ContentType });
       // res.end(data.Body);
 
-      var s3URL = 'https://s3-ap-northeast-1.amazonaws.com/runstant-shot/shot/' + key;
-      res.redirect(s3URL);
+      var imageURL = S3_URL + '/' + key;
+      res.redirect(imageURL);
     }
     else {
       res.sendFile(path.join(__dirname, '../static/images/dummy.png'));
